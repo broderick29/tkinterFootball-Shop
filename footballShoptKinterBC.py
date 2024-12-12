@@ -1,7 +1,56 @@
-"""
+""" 
 Broderick Clapper
 
 GUI application
+Description: This is a GUI application that has 3 different winds. There is a start up welcome windw, a shopping
+window, and then a checkout window. The application walks the user through purchasing football gear.
+
+Pseudocode:
+Main Program
+    import tkinter and ttk
+
+    define global variables
+        cart
+        product data
+
+    intialize main app window
+    Define functions
+        show_main_window
+        diplay main screen
+        dhow product screen
+            display products
+            list product with images and prices
+            add to cart button for each product
+
+        show checkout screen
+            display checkout window
+            show summart of items
+            inpu fields for name and payment
+            submit order button
+
+product window
+    define cart product functions
+    define submit order function
+        validates inputs
+        if valid - clear cart and show a success message
+        if invlaid - display error message
+
+GUI components
+    main window
+        welcome message
+        start shopping button
+
+    product screen
+        add a list of products
+        add "add to cart" button
+        add "back" button to return to main window
+
+    Checkout Screen
+        display order summary
+        add input fields for user details
+        add "submit" button for order
+
+Start main_window
 
 """
 #import tkinter and messagebox for pop up messages
@@ -11,9 +60,9 @@ from tkinter import ttk, messagebox
 # Product data list
 """used image_alt as I have not inserted pictures yet"""
 products = [
-    {"name": "Football Helmet", "price": 120.0, "image_alt": "Helmet Image"},
-    {"name": "Football Gloves", "price": 40.0, "image_alt": "Gloves Image"},
-    {"name": "Football Cleats", "price": 100.0, "image_alt": "Cleats Image"},
+    {"name": "Football Helmet", "price": 120.0, "image": "helmets.png"},
+    {"name": "Football Gloves", "price": 40.0, "image": "glove.png"},
+    {"name": "Football Cleats", "price": 100.0, "image": "cleats.png"},
 ]
 
 # Cart list to store selected items
@@ -91,18 +140,29 @@ product_window.withdraw()
 product_label = ttk.Label(product_window, text="Choose Your Football Gear", font=("Arial", 16))
 product_label.pack(pady=10)
 
+# dictionary for images
+product_images = {}
+
 for product in products:
     product_frame = ttk.Frame(product_window, padding=10)
     product_frame.pack(fill="x")
 
+    # Load and scale down the product image
+    product_images[product["name"]] = tk.PhotoImage(file=product["image"]).subsample(4, 4)  # Adjust subsample values as needed
+    product_image_label = ttk.Label(product_frame, image=product_images[product["name"]])
+    product_image_label.pack(side="left", padx=5)
+
+    # Display product name and price
     product_name = ttk.Label(product_frame, text=product["name"])
-    product_name.pack(side="left")
+    product_name.pack(side="left", padx=5)
 
     product_price = ttk.Label(product_frame, text=f"${product['price']:.2f}")
     product_price.pack(side="left", padx=10)
 
+    # Add to cart button
     add_button = ttk.Button(product_frame, text="Add to Cart", command=lambda p=product: add_to_cart(p))
     add_button.pack(side="right")
+
 
 product_back_button = ttk.Button(product_window, text="Go to Checkout", command=show_checkout_screen)
 product_back_button.pack(pady=20)
@@ -139,4 +199,4 @@ checkout_back_button = ttk.Button(checkout_window, text="Back to Main", command=
 checkout_back_button.pack(pady=10)
 
 # Start the application
-main_window.mainloop()
+main_window.mainloop() 
